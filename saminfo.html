@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>حاسبة معدل Info L2</title>
+<style>
+body {
+    font-family: Arial;
+    background: linear-gradient(to right,#4facfe,#00f2fe);
+    text-align: center;
+}
+.container {
+    background: white;
+    width: 650px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+}
+input {
+    width: 60px;
+    padding: 5px;
+    margin: 3px;
+}
+button {
+    padding: 10px 20px;
+    background: #4facfe;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    margin:5px;
+}
+.result {
+    margin-top: 5px;
+    font-size: 15px;
+}
+.pass { color: green; font-weight: bold; }
+.fail { color: red; font-weight: bold; }
+.final {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h2 id="title">حاسبة معدل Info L2</h2>
+
+<div id="language">
+<button onclick="setLanguage('ar')">العربية</button>
+<button onclick="setLanguage('en')">English</button>
+</div>
+
+<h3 id="asd_title">ASD (coef 3)</h3>
+TP <input id="asd_tp"> TD <input id="asd_td"> Exam <input id="asd_exam">
+<div class="result" id="res_asd"></div>
+
+<h3 id="si_title">SI (coef 3)</h3>
+TP <input id="si_tp"> TD <input id="si_td"> Exam <input id="si_exam">
+<div class="result" id="res_si"></div>
+
+<h3 id="ao_title">AO (coef 3)</h3>
+TP <input id="ao_tp"> TD <input id="ao_td"> Exam <input id="ao_exam">
+<div class="result" id="res_ao"></div>
+
+<h3 id="tg_title">Théorie de graph (coef 2)</h3>
+TD <input id="tg_td"> Exam <input id="tg_exam">
+<div class="result" id="res_tg"></div>
+
+<h3 id="ml_title">Math Logic (coef 2)</h3>
+TD <input id="ml_td"> Exam <input id="ml_exam">
+<div class="result" id="res_ml"></div>
+
+<h3 id="mn_title">Méthode Numérique (coef 2)</h3>
+TD <input id="mn_td"> Exam <input id="mn_exam">
+<div class="result" id="res_mn"></div>
+
+<h3 id="eng_title">English (coef 1)</h3>
+Exam <input id="eng_exam">
+<div class="result" id="res_eng"></div>
+
+<br>
+<button onclick="calculate()" id="calc_btn">احسب النتائج</button>
+
+<div class="final" id="final_result"></div>
+</div>
+
+<script>
+let lang = 'ar';
+
+const translations = {
+    ar: {
+        title: "حاسبة معدل Info L2",
+        ASD: "ASD",
+        SI: "SI",
+        AO: "AO",
+        Graph: "Théorie de graph",
+        ML: "Math Logic",
+        MN: "Méthode Numérique",
+        ENG: "English",
+        TP: "TP",
+        TD: "TD",
+        Exam: "Exam",
+        calculate: "احسب النتائج",
+        pass: "ناجح",
+        fail: "راسب",
+        final: "المعدل العام"
+    },
+    en: {
+        title: "Info L2 Grade Calculator",
+        ASD: "ASD",
+        SI: "SI",
+        AO: "AO",
+        Graph: "Graph Theory",
+        ML: "Math Logic",
+        MN: "Numerical Methods",
+        ENG: "English",
+        TP: "Lab",
+        TD: "Tutorial",
+        Exam: "Exam",
+        calculate: "Calculate Results",
+        pass: "Pass",
+        fail: "Fail",
+        final: "Overall Average"
+    }
+};
+
+function setLanguage(l){
+    lang = l;
+    document.getElementById("title").innerText = translations[l].title;
+    document.getElementById("asd_title").innerText = translations[l].ASD + " (coef 3)";
+    document.getElementById("si_title").innerText = translations[l].SI + " (coef 3)";
+    document.getElementById("ao_title").innerText = translations[l].AO + " (coef 3)";
+    document.getElementById("tg_title").innerText = translations[l].Graph + " (coef 2)";
+    document.getElementById("ml_title").innerText = translations[l].ML + " (coef 2)";
+    document.getElementById("mn_title").innerText = translations[l].MN + " (coef 2)";
+    document.getElementById("eng_title").innerText = translations[l].ENG + " (coef 1)";
+    document.getElementById("calc_btn").innerText = translations[l].calculate;
+    calculate();
+}
+
+function getValue(id){
+    return parseFloat(document.getElementById(id).value) || 0;
+}
+
+function status(note){
+    return note >= 10 ? "<span class='pass'>"+translations[lang].pass+"</span>" : "<span class='fail'>"+translations[lang].fail+"</span>";
+}
+
+function calculate(){
+    let asd = getValue("asd_tp")*0.2 + getValue("asd_td")*0.2 + getValue("asd_exam")*0.6;
+    let si  = getValue("si_tp")*0.2 + getValue("si_td")*0.2 + getValue("si_exam")*0.6;
+    let ao  = getValue("ao_tp")*0.2 + getValue("ao_td")*0.2 + getValue("ao_exam")*0.6;
+
+    let tg = getValue("tg_td")*0.4 + getValue("tg_exam")*0.6;
+    let ml = getValue("ml_td")*0.4 + getValue("ml_exam")*0.6;
+    let mn = getValue("mn_td")*0.4 + getValue("mn_exam")*0.6;
+
+    let eng = getValue("eng_exam");
+
+    document.getElementById("res_asd").innerHTML = translations[lang].ASD + " = " + asd.toFixed(2) + " → " + status(asd);
+    document.getElementById("res_si").innerHTML  = translations[lang].SI + " = " + si.toFixed(2) + " → " + status(si);
+    document.getElementById("res_ao").innerHTML  = translations[lang].AO + " = " + ao.toFixed(2) + " → " + status(ao);
+    document.getElementById("res_tg").innerHTML  = translations[lang].Graph + " = " + tg.toFixed(2) + " → " + status(tg);
+    document.getElementById("res_ml").innerHTML  = translations[lang].ML + " = " + ml.toFixed(2) + " → " + status(ml);
+    document.getElementById("res_mn").innerHTML  = translations[lang].MN + " = " + mn.toFixed(2) + " → " + status(mn);
+    document.getElementById("res_eng").innerHTML = translations[lang].ENG + " = " + eng.toFixed(2) + " → " + status(eng);
+
+    let total = (asd*3)+(si*3)+(ao*3)+(tg*2)+(ml*2)+(mn*2)+(eng*1);
+    let moyenne = total / 16;
+
+    let finalStatus = moyenne >= 10 ? "<span class='pass'>"+translations[lang].pass+"</span>" : "<span class='fail'>"+translations[lang].fail+"</span>";
+
+    document.getElementById("final_result").innerHTML =
+        translations[lang].final + " = " + moyenne.toFixed(2) + " → " + finalStatus;
+}
+
+// ضبط اللغة العربية افتراضيًا
+setLanguage('ar');
+</script>
+
+</body>
+</html>
